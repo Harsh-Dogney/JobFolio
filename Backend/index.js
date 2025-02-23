@@ -21,7 +21,12 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 // CORS Configuration
-const allowedOrigins = ["http://localhost:5173", "http://localhost:3100", "https://jobfolio-1-v4ql.onrender.com"];
+const allowedOrigins = [
+  "http://localhost:5173", 
+  "http://localhost:3100", 
+  "https://jobfolio-1-v4ql.onrender.com", 
+  "http://localhost:3001"
+];
 
 app.use(
   cors({
@@ -32,7 +37,9 @@ app.use(
         callback(new Error("Not allowed by CORS"));
       }
     },
-    credentials: true,
+    credentials: true, // Allow credentials such as cookies, authorization headers, etc.
+    allowedHeaders: ["Content-Type", "Authorization"], // Include headers to ensure token-based auth works
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // Explicitly allow the relevant HTTP methods
   })
 );
 
@@ -42,11 +49,15 @@ app.use("/api/v1/company", companyRoute);
 app.use("/api/v1/job", jobRoute);
 app.use("/api/v1/application", applicationRoute);
 
+// Database connection log
+mongoose.connection.once("open", () => {
+  console.log("Connected to MongoDB");
+});
+
 // Server Setup
 const PORT = process.env.PORT || 8000;
 
-app.listen(PORT, ()=>{
-    connectDB();
-    console.log(`Server running at port ${PORT}`);
+app.listen(PORT, () => {
+  connectDB();
+  console.log(`Server running at port ${PORT}`);
 });
-

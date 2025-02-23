@@ -21,7 +21,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 // CORS Configuration
-const allowedOrigins = ["http://localhost:5173", "http://localhost:3100"];
+const allowedOrigins = ["http://localhost:5173", "http://localhost:3100", "https://jobfolio-g794.onrender.com"];
 
 app.use(
   cors({
